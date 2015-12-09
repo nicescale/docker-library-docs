@@ -1,4 +1,4 @@
-# Supported tags and respective `Dockerfile` links
+# 支持的tag标签，以及相关`Dockerfile`链接
 
 -	[`latest`, `centos7`, `7` (*docker/Dockerfile*)](https://github.com/CentOS/sig-cloud-instance-images/blob/281559d6864e84fe365ef4007d4db27c197b50fb/docker/Dockerfile)
 -	[`centos6`, `6` (*docker/Dockerfile*)](https://github.com/CentOS/sig-cloud-instance-images/blob/20732d1bb34a9aba45c1c6f41576ed6bf3d8c619/docker/Dockerfile)
@@ -9,39 +9,39 @@
 -	[`centos6.6`, `6.6` (*docker/Dockerfile*)](https://github.com/CentOS/sig-cloud-instance-images/blob/8911843d9a6cc71aadd81e491f94618aded94f30/docker/Dockerfile)
 -	[`centos5.11`, `5.11` (*docker/Dockerfile*)](https://github.com/CentOS/sig-cloud-instance-images/blob/2d0554464ae19f4fd70d1b540c8968dbe872797b/docker/Dockerfile)
 
-For more information about this image and its history, please see [the relevant manifest file (`library/centos`)](https://github.com/docker-library/official-images/blob/master/library/centos). This image is updated via pull requests to [the `docker-library/official-images` GitHub repo](https://github.com/docker-library/official-images).
+关于本镜像的更详细信息，请访问：[the relevant manifest file (`library/centos`)](https://github.com/docker-library/official-images/blob/master/library/centos)。 本镜像的更新依赖于：[the `docker-library/official-images` GitHub repo](https://github.com/docker-library/official-images)。
 
-For detailed information about the virtual/transfer sizes and individual layers of each of the above supported tags, please see [the `centos/tag-details.md` file](https://github.com/docker-library/docs/blob/master/centos/tag-details.md) in [the `docker-library/docs` GitHub repo](https://github.com/docker-library/docs).
+关于镜像每个layer以及上述每个tag的详细信息，请查看：[the `centos/tag-details.md` file](https://github.com/docker-library/docs/blob/master/centos/tag-details.md) in [the `docker-library/docs` GitHub repo](https://github.com/docker-library/docs)。
 
 # CentOS
 
-CentOS Linux is a community-supported distribution derived from sources freely provided to the public by [Red Hat](ftp://ftp.redhat.com/pub/redhat/linux/enterprise/) for Red Hat Enterprise Linux (RHEL). As such, CentOS Linux aims to be functionally compatible with RHEL. The CentOS Project mainly changes packages to remove upstream vendor branding and artwork. CentOS Linux is no-cost and free to redistribute. Each CentOS Linux version is maintained for up to 10 years (by means of security updates -- the duration of the support interval by Red Hat has varied over time with respect to Sources released). A new CentOS Linux version is released approximately every 2 years and each CentOS Linux version is periodically updated (roughly every 6 months) to support newer hardware. This results in a secure, low-maintenance, reliable, predictable, and reproducible Linux environment.
+CentOS是一个由社区提供支持的Linux发行版，它是自[Red Hat](ftp://ftp.redhat.com/pub/redhat/linux/enterprise/)企业版（RHEL）依照开放源代码规定释出的源代码所编译而成，因此其目标是提供和RHEL一致的功能。CentOS项目的不同在于并不包含封闭源代码软件，任何人都可以开放、免费地使用它，任何一个CentOS版本都会提供10年的维护支持。CentOS通常会以两年为周期来进行新版本的发布，并且每个CentOS版本都会获得周期性的更新（约6个月左右）以提供对新硬件的支持，因此它提供了一个安全、稳定且值得信赖的Linux使用环境。
 
 > [wiki.centos.org](https://wiki.centos.org/FrontPage)
 
 ![logo](https://raw.githubusercontent.com/docker-library/docs/master/centos/logo.png)
 
-# CentOS image documentation
+# CentOS镜像的文档
 
-The `centos:latest` tag is always the most recent version currently available.
+`centos:latest`tag标签总是指向当前可用的最新版本。
 
-## Rolling builds
+## 滚动升级
 
-The CentOS Project offers regularly updated images for all active releases. These images will be updated monthly or as needed for emergency fixes. These rolling updates are tagged with the major version number only. For example: `docker pull centos:6` or `docker pull centos:7`
+CentOS项目会周期性地对之前的版本提供更新，以保证这些镜像的稳定性及时效性，这类滚动升级的tag标签只会包含主版本号信息，例如: `docker pull centos:6`或`docker pull centos:7`。
 
-## Minor tags
+## 小版本tag标签
 
-Additionally, images with minor version tags that correspond to install media are also offered. **These images DO NOT recieve updates** as they are intended to match installation iso contents. If you choose to use these images it is highly recommended that you include `RUN yum -y update && yum clean all` in your Dockerfile, or otherwise address any potential security concerns. To use these images, please specify the minor version tag:
+镜像还提供了指向特定小版本的tag标签，如果你希望使用这些版本，我们强烈建议在你的Dockerfile中加上`RUN yum -y update && yum clean all`，并且对安全性保持更高的关注度。为了使用这些镜像，请注明具体的版本信息，例如:
 
-For example: `docker pull centos:5.11` or `docker pull centos:6.6`
+`docker pull centos:5.11` or `docker pull centos:6.6`
 
-# Package documentation
+# 软件包文档
 
-By default, the CentOS containers are built using yum's `nodocs` option, which helps reduce the size of the image. If you install a package and discover files missing, please comment out the line `tsflags=nodocs` in `/etc/yum.conf` and reinstall your package.
+CentOS容器在构建时，默认会使用yum的`nodocs`选项，这有助于减小镜像的体积。如果你发现某些软件包的安装出现了文件丢失的情况，请将位于`/etc/yum.conf`中的`tsflags=nodocs`注释掉，并重新尝试安装该软件包。
 
-# Systemd integration
+# Systemd
 
-Currently, systemd in CentOS 7 has been removed and replaced with a `fakesystemd` package for dependency resolution. This is due to systemd requiring the `CAP_SYS_ADMIN` capability, as well as being able to read the host's cgroups. If you wish to replace the fakesystemd package and use systemd normally, please follow the steps below.
+目前在CentOS7中，systemd已经被`fakesystemd`软件包所取代，从而获得读取主机cgroups信息的能力，如果你依然希望使用systemd 那么请遵照下面的操作步骤。
 
 ## Dockerfile for systemd base image
 
@@ -64,15 +64,15 @@ VOLUME [ "/sys/fs/cgroup" ]
 CMD ["/usr/sbin/init"]
 ```
 
-This Dockerfile swaps out fakesystemd for the real package, but deletes a number of unit files which might cause issues. From here, you are ready to build your base image.
+然后，你需要构建自己的基础镜像：
 
 ```console
 $ docker build --rm -t local/c7-systemd .
 ```
 
-## Example systemd enabled app container
+## systemd版容器的使用示例
 
-In order to use the systemd enabled base container created above, you will need to create your `Dockerfile` similar to the one below.
+为了使用我们之前创建的systemd可用版基础镜像，你需要创建自己的对应`Dockerfile`，类似如下所示：
 
 ```dockerfile
 FROM local/c7-systemd
@@ -81,44 +81,42 @@ EXPOSE 80
 CMD ["/usr/sbin/init"]
 ```
 
-Build this image:
+构建该镜像：
 
 ```console
 $ docker build --rm -t local/c7-systemd-httpd
 ```
 
-## Running a systemd enabled app container
+## 启动一个systemd可用版容器
 
-In order to run a container with systemd, you will need to use the `--privileged` option mentioned earlier, as well as mounting the cgroups volumes from the host. Below is an example command that will run the systemd enabled httpd container created earlier.
+为了运行一个使用systemd的容器，你需要使用之前提到过的`--privileged` 选项，从而挂载主机的cgroups卷，可以参考下面的示例：
 
 ```console
 $ docker run --privileged -ti -v /sys/fs/cgroup:/sys/fs/cgroup:ro -p 80:80 local/c7-systemd-httpd
 ```
 
-This container is running with systemd in a limited context, but it must always be run as a privileged container with the cgroups filesystem mounted.
+# 支持的Docker版本
 
-# Supported Docker versions
+本镜像官方提供了对于Docker 1.9.1的支持。
 
-This image is officially supported on Docker version 1.9.1.
+而对于较老版本（低于1.6）则只能尽量做到对基本功能的支持。
 
-Support for older versions (down to 1.6) is provided on a best-effort basis.
+关于如何升级Docker版本，请查看：[the Docker installation documentation](https://docs.docker.com/installation/) 。
 
-Please see [the Docker installation documentation](https://docs.docker.com/installation/) for details on how to upgrade your Docker daemon.
+# 用户反馈
 
-# User Feedback
+## 文档
 
-## Documentation
+本镜像的文档位于[`docker-library/docs` GitHub repo](https://github.com/docker-library/docs)下的[`centos/` directory](https://github.com/docker-library/docs/tree/master/centos)目录中。在提交新的pull request之前，请确保已经熟悉于 [repository's `README.md` file](https://github.com/docker-library/docs/blob/master/README.md)。
 
-Documentation for this image is stored in the [`centos/` directory](https://github.com/docker-library/docs/tree/master/centos) of the [`docker-library/docs` GitHub repo](https://github.com/docker-library/docs). Be sure to familiarize yourself with the [repository's `README.md` file](https://github.com/docker-library/docs/blob/master/README.md) before attempting a pull request.
+## 问题
 
-## Issues
+如果你有关于本镜像的任何问题，请通过[https://bugs.centos.org](https://bugs.centos.org)或[GitHub issue](https://github.com/CentOS/sig-cloud-instance-images/issues)来联系我们。
 
-If you have any problems with or questions about this image, please contact us by submitting a ticket at [https://bugs.centos.org](https://bugs.centos.org) or through a [GitHub issue](https://github.com/CentOS/sig-cloud-instance-images/issues).
+你也可以从[Freenode](https://freenode.net)的`#docker-library`聊天频道中，获得来自本镜像维护者的直接帮助。
 
-You can also reach many of the official image maintainers via the `#docker-library` IRC channel on [Freenode](https://freenode.net).
+## 提供帮助
 
-## Contributing
+我们欢迎任何包括新功能、Bug修复在内的pull request提交，并且会尽快作出回复。
 
-You are invited to contribute new features, fixes, or updates, large or small; we are always thrilled to receive pull requests, and do our best to process them as fast as we can.
-
-Before you start to code, we recommend discussing your plans by submitting a ticket at [https://bugs.centos.org](https://bugs.centos.org) or through a [GitHub issue](https://github.com/CentOS/sig-cloud-instance-images/issues), especially for more ambitious contributions. This gives other contributors a chance to point you in the right direction, give you feedback on your design, and help you find out if someone else is working on the same thing.
+在动手编码之前，我们建议首先在[https://bugs.centos.org](https://bugs.centos.org)或[GitHub issue](https://github.com/CentOS/sig-cloud-instance-images/issues)提出你的设想，这让其他开发者有机会为你提供一些指导性的建议，并且对设计提出反馈，同时还可以让你知道是否已经有人在着手开发该功能了。
