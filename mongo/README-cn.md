@@ -31,7 +31,7 @@ $ docker run --name some-mongo -d mongo
 
 该镜像包含 `EXPOSE 27017` ( mongo 的服务端口), 所以一个标准的容器连接可以使其自动连接到容器 (如下所示).
 
-## connect to it from an application
+## 应用连接到容器
 
 ```console
 $ docker run --name some-app --link some-mongo:mongo -d application-that-uses-mongo
@@ -53,12 +53,12 @@ $ docker run -it --link some-mongo:mongo --rm mongo sh -c 'exec mongo "$MONGO_PO
 $ docker run --name some-mongo -d mongo --storageEngine wiredTiger
 ```
 
-## Where to Store Data
+## 数据存储位置
 
-重要提示:使用的Docker容器中运行的应用程序有几种方法来存储数据。 我们鼓励mongo镜像的用户采用的有：:
+重要提示:在Docker容器中运行的应用程序有几种方式来存储数据。 我们鼓励mongo镜像用户采用的有：
 
--   让Docker管理你的数据库文件， [通过Docker的内部卷管理写入数据文件到主机磁盘](https://docs.docker.com/userguide/dockervolumes/#adding-a-data-volume). 这是默认的，而且简单对用户透明。 不好的地方在于，这些文件很难在主机系统上找到和使用。
--   在主机系统上创建一个数据目录并 [挂载该目录到容器内目录](https://docs.docker.com/userguide/dockervolumes/#mount-a-host-directory-as-a-data-volume). 这样会将数据库文件存储主机系统上的已知的位置, 使得直接在主机系统上操作数据文件变得容易。 这样做的不利在于，用户需要保证主机上的目录已存在, 并且意味着. 该目录的权限和主机系统上的其他安全机制是正确设置的。
+-  让Docker管理你的数据库文件， [通过Docker的内部卷管理写入数据文件到主机磁盘](https://docs.docker.com/userguide/dockervolumes/#adding-a-data-volume). 这是默认的，而且简单对用户透明。 不好的地方在于，这些文件很难在主机系统上找到和使用。
+- 在主机系统上创建一个数据目录并 [挂载该目录到容器内目录](https://docs.docker.com/userguide/dockervolumes/#mount-a-host-directory-as-a-data-volume). 这样会将数据库文件存储主机系统上的已知的位置, 使得直接在主机系统上操作数据文件变得容易。 这样做的不利在于，用户需要保证主机上的目录已存在, 并且意味着. 该目录的权限和主机系统上的其他安全机制是正确设置的。
 
 **警告**: 因为MongoDB使用了内存映射文件，而这在vboxfs上是不被允许的。 ([vbox bug](https://www.virtualbox.org/ticket/819)).
 
@@ -70,7 +70,7 @@ Docker文档可以很好的帮助你理解不同的存储选项及其差异, 而
 	$ docker run --name some-mongo -v /my/own/datadir:/data/db -d mongo:tag
 	```
 
-命令行中`-v /my/own/datadir:/data/db` 项挂载了 `/my/own/datadir` 目录挂载到容器内的`/data/db`目录 , 也就是MongoDB默认的数据文件存储位置.
+命令行中`-v /my/own/datadir:/data/db` 项将 `/my/own/datadir` 目录挂载到容器内的`/data/db`目录 , 也就是MongoDB默认的数据文件存储位置.
 
 注意,主机系统启用了SELinux的用户可能会遇到这个问题. 目前的解决方案是将有关SELinux策略类型分配给新的数据目录,容器将被允许访问:
 
@@ -87,3 +87,5 @@ $ chcon -Rt svirt_sandbox_file_t /my/own/datadir
 此镜像支持 docker 官方版本 1.9.1.
 
 或者更老的版本 (到1.6).
+
+
