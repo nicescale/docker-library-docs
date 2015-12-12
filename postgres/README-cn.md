@@ -13,9 +13,9 @@
 
 # 关于 PostgreSQL?
 
-PostgreSQL, 常简写为 "Postgres", 是一个高可扩展性的对象-关系数据库管理系统(ORDBMS)， As a database server, its primary function is to store data, securely and supporting best practices, and retrieve it later, as requested by other software applications, be it those on the same computer or those running on another computer across a network (including the Internet). It can handle workloads ranging from small single-machine applications to large Internet-facing applications with many concurrent users. Recent versions also provide replication of the database itself for security and scalability.
+PostgreSQL, 常简写为 "Postgres", 是一个高可扩展性的对象-关系数据库管理系统(ORDBMS)，作为数据库，它的主要功能是安全的存储数据，并在以后可以通过其他应用程序检索到， 包括同一主机上的应用程序或是其他的网络主机上的(包括互联网). 它可以处理多种工作负载，从小型单机应用到有许多并发用户大型的面向internet应用程序， 最新版本还提供了复制数据库本身的安全性和可伸缩性。
 
-PostgreSQL implements the majority of the SQL:2011 standard, is ACID-compliant and transactional (including most DDL statements) avoiding locking issues using multiversion concurrency control (MVCC), provides immunity to dirty reads and full serializability; handles complex SQL queries using many indexing methods that are not available in other databases; has updateable views and materialized views, triggers, foreign keys; supports functions and stored procedures, and other expandability, and has a large number of extensions written by third parties. In addition to the possibility of working with the major proprietary and open source databases, PostgreSQL supports migration from them, by its extensive standard SQL support and available migration tools. And if proprietary extensions had been used, by its extensibility that can emulate many through some built-in and third-party open source compatibility extensions, such as for Oracle.
+PostgreSQL 实现了大多数的 SQL:2011 标准, 符合acid和事务(包括大多数 DDL 语言) avoiding locking issues 使用多版本并发控制 (MVCC), provides immunity to dirty reads and full serializability; 在处理复杂SQL查询时，使用了许多其他数据库无法做到的索引；可更新视图和物化视图,触发器,外键,支持函数和存储过程, 以及其它的扩展性, 并且有大量的第三方扩展，除了使用主要的自营和开源数据库, PostgreSQL还有广泛的标准SQL支持和有用的迁移工具,它的可扩展性包含了其内置的和第三方开源兼容扩展,比如Oracle的。
 
 > [wikipedia.org/wiki/PostgreSQL](https://en.wikipedia.org/wiki/PostgreSQL)
 
@@ -29,7 +29,7 @@ PostgreSQL implements the majority of the SQL:2011 standard, is ACID-compliant a
 $ docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres
 ```
 
-This image includes `EXPOSE 5432` (the postgres port), so standard container linking will make it automatically available to the linked containers. The default `postgres` user and database are created in the entrypoint with `initdb`.
+镜像包含 `EXPOSE 5432` (postgres 的端口), 其它容器可以通过标准的容器链接获取到链接。 创建了默认用户和数据库的 `postgres` 入口的 `initdb`.
 
 > The postgres database is a default database meant for use by users, utilities and third party applications.  
 > [postgresql.org/docs](http://www.postgresql.org/docs/9.3/interactive/app-initdb.html)
@@ -46,29 +46,28 @@ $ docker run --name some-app --link some-postgres:postgres -d application-that-u
 $ docker run -it --link some-postgres:postgres --rm postgres sh -c 'exec psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p "$POSTGRES_PORT_5432_TCP_PORT" -U postgres'
 ```
 
-## Environment Variables
+## 环境变量
 
-The PostgreSQL image uses several environment variables which are easy to miss. While none of the variables are required, they may significantly aid you in using the image.
+PostgreSQL的镜像使用多个环境变量，虽然没有一个变量是必需的,他们可能会大大帮助你使用镜像。
 
 ### `POSTGRES_PASSWORD`
 
-This environment variable is recommended for you to use the PostgreSQL image. This environment variable sets the superuser password for PostgreSQL. The default superuser is defined by the `POSTGRES_USER` environment variable. In the above example, it is being set to "mysecretpassword".
+该环境变量推荐使用，为PostgreSQL设置超级用户密码，默认的超级用户由 `POSTGRES_USER` 指定， 在上面的例子中，它被设置为"mysecretpassword".
 
 ### `POSTGRES_USER`
 
-This optional environment variable is used in conjunction with `POSTGRES_PASSWORD` to set a user and its password. This variable will create the specified user with superuser power and a database with the same name. If it is not specified, then the default user of `postgres` will be used.
+这个可选的环境变量与`POSTGRES_PASSWORD` 用于设置用户和密码，这个变量将创建指定的用户为超级用户，如果没有指定数据库名称，还会创建具有相同名称的数据库。如果没有指定,那么将使用默认用户的`postgres`。
 
 ### `PGDATA`
 
-This optional environment variable can be used to define another location - like a subdirectory - for the database files. The default is `/var/lib/postgresql/data`, but if the data volume you're using is a fs mountpoint (like with GCE persistent disks), Postgres `initdb` recommends a subdirectory (for example `/var/lib/postgresql/data/pgdata` ) be created to contain the data.
+这个可选环境变量可以用来定义另一个位置，如子目录数据库文件. 默认为 `/var/lib/postgresql/data`, 但是如果你使用的卷挂载(像GCE持久磁盘), Postgres `initdb` 推荐使用一个子目录(如`/var/lib/postgresql/data/pgdata` )来存储数据。
 
-# How to extend this image
+# 镜像的扩展
 
-If you would like to do additional initialization in an image derived from this one, add one or more `*.sql` or `*.sh` scripts under `/docker-entrypoint-initdb.d` (creating the directory if necessary). After the entrypoint calls `initdb` to create the default `postgres` user and database, it will run any `*.sql` files and source any `*.sh` scripts found in that directory to do further initialization before starting the service.
+如果你希望在镜像中做额外的初始化，可以 `/docker-entrypoint-initdb.d` 目录 (不存在需创建)中添加一个或多个 `*.sql` 或`*.sh` 脚本。 在 `initdb` 创建默认的 `postgres` 用户和数据库之后, 在启动服务之前将运行 `*.sql` 文件和该目录下所有 `*.sh` 脚本进一步初始化
+文件会由 `POSTGRES_USER`执行, 默认 `postgres` 超级用户. 这里推荐使用 `psql` 命令和 `--username "$POSTGRES_USER"` 选项来运行 `*.sh`脚本。 由于信任验证Unix socket连接的存在使容器内这个用户将能够不用密码连接。
 
-These initialization files will be executed in sorted name order as defined by the current locale, which defaults to `en_US.utf8`. Any `*.sql` files will be executed by `POSTGRES_USER`, which defaults to the `postgres` superuser. It is recommended that any `psql` commands that are run inside of a `*.sh` script be executed as `POSTGRES_USER` by using the `--username "$POSTGRES_USER"` flag. This user will be able to connect without a password due to the presence of `trust` authentication for Unix socket connections made inside the container.
-
-You can also extend the image with a simple `Dockerfile` to set a different locale. The following example will set the default locale to `de_DE.utf8`:
+你同样可以使用一个简单的`Dockerfile` 来扩展镜像。如下设置了默认语言环境为 `de_DE.utf8`:
 
 ```dockerfile
 FROM postgres:9.4
@@ -76,17 +75,17 @@ RUN localedef -i de_DE -c -f UTF-8 -A /usr/share/locale/locale.alias de_DE.UTF-8
 ENV LANG de_DE.utf8
 ```
 
-Since database initialization only happens on container startup, this allows us to set the language before it is created.
+因为数据库初始化仅发生在容器启动时，这允许我们在创建之前设置语言。
 
-# Caveats
+# 警告
 
-If there is no database when `postgres` starts in a container, then `postgres` will create the default database for you. While this is the expected behavior of `postgres`, this means that it will not accept incoming connections during that time. This may cause issues when using automation tools, such as `fig`, that start several containers simultaneously.
+如果启动 `postgres`容器时没有数据库,  `postgres`将会创建一个默认数据库 `postgres`,这意味着它将在这段时间不接受传入的连接。这可能在使用自动化工具时导致问题,如`fig`,如同时启动多个容器。 
 
-# Supported Docker versions
+# 支持的 docker 版本
 
-This image is officially supported on Docker version 1.9.1.
+此镜像支持 docker 官方版本 1.9.1.
 
-Support for older versions (down to 1.6) is provided on a best-effort basis.
+或者更老的版本 (到1.6).
 
-Please see [the Docker installation documentation](https://docs.docker.com/installation/) for details on how to upgrade your Docker daemon.
+请参考 [Docker安装文档](https://docs.docker.com/installation/)了解如果升级docker daemon
 
