@@ -6,7 +6,7 @@
 
 关于本镜像的更详细信息，请访问：[清单文件 (`library/mysql`)](https://github.com/docker-library/official-images/blob/master/library/mysql). 镜像更新依赖于 [ `docker-library/official-images` GitHub repo](https://github.com/docker-library/official-images).
 
-关于镜像每个layer以及上述每个tag的详细信息，请查看位于 [the `docker-library/docs` GitHub repo](https://github.com/docker-library/docs) 的 [ `mysql/tag-details.md` 文件](https://github.com/docker-library/docs/blob/master/mysql/tag-details.md).
+关于镜像每个layer以及上述每个tag的详细信息，请查看位于 [`docker-library/docs` GitHub repo](https://github.com/docker-library/docs) 的 [ `mysql/tag-details.md` 文件](https://github.com/docker-library/docs/blob/master/mysql/tag-details.md).
 
 # 关于 MySQL
 
