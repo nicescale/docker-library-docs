@@ -1,4 +1,4 @@
-# Supported tags and respective `Dockerfile` links
+# 支持的tag标签，以及相关`Dockerfile`链接
 
 -	[`latest`, `enterprise`, `4.0.0`, `enterprise-4.0.0` (*enterprise/couchbase-server/4.0.0/Dockerfile*)](https://github.com/couchbase/docker/blob/a997f494aae7d8fa572dbc581ab289e8eaa72279/enterprise/couchbase-server/4.0.0/Dockerfile)
 -	[`community`, `community-4.0.0` (*community/couchbase-server/4.0.0/Dockerfile*)](https://github.com/couchbase/docker/blob/a997f494aae7d8fa572dbc581ab289e8eaa72279/community/couchbase-server/4.0.0/Dockerfile)
@@ -9,39 +9,39 @@
 -	[`2.5.2`, `enterprise-2.5.2` (*enterprise/couchbase-server/2.5.2/Dockerfile*)](https://github.com/couchbase/docker/blob/a997f494aae7d8fa572dbc581ab289e8eaa72279/enterprise/couchbase-server/2.5.2/Dockerfile)
 -	[`community-2.2.0` (*community/couchbase-server/2.2.0/Dockerfile*)](https://github.com/couchbase/docker/blob/a997f494aae7d8fa572dbc581ab289e8eaa72279/community/couchbase-server/2.2.0/Dockerfile)
 
-For more information about this image and its history, please see [the relevant manifest file (`library/couchbase`)](https://github.com/docker-library/official-images/blob/master/library/couchbase). This image is updated via pull requests to [the `docker-library/official-images` GitHub repo](https://github.com/docker-library/official-images).
+关于本镜像的更详细信息，请访问：[the relevant manifest file (`library/couchbase`)](https://github.com/docker-library/official-images/blob/master/library/couchbase)。本镜像的更新依赖：[the `docker-library/official-images` GitHub repo](https://github.com/docker-library/official-images).
 
-For detailed information about the virtual/transfer sizes and individual layers of each of the above supported tags, please see [the `couchbase/tag-details.md` file](https://github.com/docker-library/docs/blob/master/couchbase/tag-details.md) in [the `docker-library/docs` GitHub repo](https://github.com/docker-library/docs).
+关于镜像每个layer以及上述每个tag的详细信息，请查看位于[the `docker-library/docs` GitHub repo](https://github.com/docker-library/docs) 下的[the `couchbase/tag-details.md` file](https://github.com/docker-library/docs/blob/master/couchbase/tag-details.md)。
 
-# What is Couchbase Server?
+# Couchbase Server是什么？
 
-[Couchbase Server](http://en.wikipedia.org/wiki/Couchbase_Server) is an open-source, distributed (shared-nothing architecture) NoSQL document-oriented database and key-value store that is optimized for interactive applications.
+[Couchbase Server](http://en.wikipedia.org/wiki/Couchbase_Server) 是一个开源的面向文档型分布式NoSQL数据库，特别针对交互式应用进行了相关的优化。
 
-Licensing information is covered towards the end of this guide.
+关于软件证书信息请参考本文档的末尾。
 
-For support, please visit the [Couchbase support forum](https://forums.couchbase.com/) or `#couchbase` on irc.freenode.net.
++如果你有关于本镜像的任何问题，请通过[Couchbase support forum](https://forums.couchbase.com/) 或irc.freenode.net上的`#couchbase`频道获取帮助。
 
 ![logo](https://raw.githubusercontent.com/docker-library/docs/master/couchbase/logo.png)
 
-# How to use this image: QuickStart
+# 如何使用本镜像：快速上手
 
 ```console
 $ docker run -d -p 8091:8091 couchbase
 ```
 
-At this point go to http://localhost:8091 from the host machine to see the Admin Console web UI. More details and screenshots are given below in the **Single host, single container** section.
+然后在浏览器中访问：http://localhost:8091来查看管理员管理界面，更多细节和相关截图请参见 **单主机，单容器** 部分。
 
-# Background Information
+# 背景信息
 
-## Networking
+## 网络
 
-Couchbase Server communicates on a number of different ports (see the [Couchbase Server documentation](http://docs.couchbase.com/admin/admin/Install/install-networkPorts.html)). It also is not generally supported for nodes in a cluster to be behind any kind of NAT. For these reasons, Docker's default networking configuration is not ideally suited to Couchbase Server deployments.
+Couchbase Server 可以同时处理不同的通信请求（参见[Couchbase Server documentation](http://docs.couchbase.com/admin/admin/Install/install-networkPorts.html)）。其原本并不适用应对于位于同一集群下的不同NAT主机，因此Docker的默认网络配置并非部署Couchbase Server的适当选项。
 
-There are several deployment scenarios which this Docker image can easily support. These will be detailed below, along with recommended network arrangements for each.
+下面会介绍几个本镜像可以轻易实现的应用情景，我们会给出对每种网络配置的相关建议。
 
-## Volumes
+## 卷
 
-A Couchbase Server Docker container will write all persistent and node-specific data under the directory `/opt/couchbase/var`. As this directory is declared to be a Docker volume, it will be persisted outside the normal union filesystem. This results in improved performance. It also allows you to easily migrate to a container running an updated point release of Couchbase Server without losing your data with a process like this:
+一个Couchbase Server的Docker容器会将所有数据保存在`/opt/couchbase/var`目录下，而该目录实际会被当作一个Docker挂载卷来处理，因此会独立于文件系统被保存，这会带来性能方面的显著提升。这还可以让你可以向正在运行的Couchbase Server容器导入数据，而不用担心现有数据的丢失：
 
 ```console
 $ docker stop my-couchbase-container
@@ -49,21 +49,21 @@ $ docker run -d --name my-new-couchbase-container --volumes-from my-couchbase-co
 $ docker rm my-couchbase-container
 ```
 
-By default, the persisted location of the volume on your Docker host will be hidden away in a location managed by the Docker daemon. In order to control its location - in particular, to ensure that it is on a partition with sufficient disk space for your server - we recommend mapping the volume to a specific directory on the host filesystem using the `-v` option to `docker run`.
+默认情况下，该卷由Docker进程来管理，并不对外公开。在特殊情况下，为了对其进行管理，我们建议将该卷在主机文件系统上映射到特殊的目录下（使 `docker run`命令的 `-v`参数。
 
-All of the example commands below will assume you are using volumes mapped to host directories.
+下面的示例会默认你已经完成了映射。
 
 *SELinux workaround*
 
-If you have SELinux enabled, mounting host volumes in a container requires an extra step. Assuming you are mounting the `~/couchbase` directory on the host filesystem, you will need to run the following command once before running your first container on that host:
+如果你设置了SELinux，那么在容器中挂载卷需要额外的步骤，假设你希望对`~/couchbase`目录进行挂载，你需要运行如下命令：
 
 ```console
 $ mkdir ~/couchbase && chcon -Rt svirt_sandbox_file_t ~/couchbase
 ```
 
-## Ulimits
+## 上限设定
 
-Couchbase normally expects the following changes to ulimits:
+Couchbase默认会采用以下的上限设定:
 
 ```console
 $ ulimit -n 40960        # nofile: max number of open files
@@ -71,21 +71,21 @@ $ ulimit -c unlimited    # core: max core file size
 $ ulimit -l unlimited    # memlock: maximum locked-in-memory address space
 ```
 
-These ulimit settings are necessary when running under heavy load; but if you are just doing light testing and development, you can omit these settings and everything will still work.
+这些限制主要针对于高负载运行，但如果只适用于轻量级的测试和开发，你可以忽视这些限制，一切都会照常运行的。
 
-In order to set the ulimits in your container, you will need to run Couchbase Docker containers with the following additional `--ulimit` flags:
+为了在容器中应用这些限制设定，你需要使用`--ulimit`选项：
 
 ```console
 $ docker run -d --ulimit nofile=40960:40960 --ulimit core=100000000:100000000 --ulimit memlock=100000000:100000000 couchbase
 ```
 
-Since `unlimited` is not supported as a value, it sets the core and memlock values to 100 GB. If your system has more than 100 GB RAM, you will want to increase this value to match the available RAM on the system.
+这会为core和memlock文件设置100 GB的大小上限。如果你的系统拥有大于100 GB的内存，那么可以考虑增大这个设定值。
 
-NOTE: the `--ulimit` flags only work on Docker 1.6 or later.
+注意: `--ulimit`只工作在Docker 1.6以上版本。
 
-# Common Deployment Scenarios
+# 常见部署情景
 
-## Single host, single container
+## 单主机，单容器
 
 	┌───────────────────────┐
 	│   Host OS (Linux)     │
@@ -99,48 +99,48 @@ NOTE: the `--ulimit` flags only work on Docker 1.6 or later.
 	│  └─────────────────┘  │
 	└───────────────────────┘
 
-This is a quick way to try out Couchbase Server on your own machine with no installation overhead - just *download and run*. In this case, any networking configuration will work; the only real requirement is that port 8091 be exposed so that you can access the Couchbase Admin Console.
+这可能是在自己主机上尝试Couchbase Server的最简单方法了：只需*下载并运行*就可以了。在本情景下，任何网络模式都可以很好地工作，你所需要的只是将8091端口暴露出来。
 
-**Start the container**
+**运行容器**
 
 ```console
 $ docker run -d -v ~/couchbase:/opt/couchbase/var -p 8091:8091 --name my-couchbase-server couchbase
 ```
 
-We use the `--name` option to make it easier to refer to this running container in future.
+我们使用`--name`选项来让日后对该容器的管理变得更容易。
 
-**Verify container start**
+**确认容器运行状态**
 
-Use the container name you specified (eg. `my-couchbase-server`) to view the logs:
+使用刚才设置的容器名称（例如上面的`my-couchbase-server`）来查看其日志：
 
 ```console
 $ docker logs my-couchbase-server
 Starting Couchbase Server -- Web UI available at http://<ip>:8091
 ```
 
-**Connect to the Admin Console**
+**链接到管理员控制面板**
 
-From the host, connect your browser to http://localhost:8091, and you should see the Couchbase Server welcome screen:
+在主机的浏览器中访问：http://localhost:8091，你将会看到Couchbase Server的欢迎界面：
 
 ![Welcome Screen](http://couchbase-mobile.s3.amazonaws.com/github-assets/couchbase_welcome_2.png)
 
-**Configure**
+**配置**
 
--	Click "Setup" button
+-	点击"Setup"按钮
 
--	For all Setup Wizard screens, leave all values as default and click "Next"
+-	对于安装中的每一步操作，你都可以使用默认值并不停"Next"来继续。
 
-After finishing the Setup Wizard, you should see:
+安装配置过程结束之后，你将会看到：
 
 ![Servers Screen](http://couchbase-mobile.s3.amazonaws.com/github-assets/couchbase_post_welcome.png)
 
-**Connect via SDK**
+**从SDK连接**
 
-At this point, you are ready to connect to your Couchbase Server node from one of the [Couchbase Client SDKs](http://docs.couchbase.com/couchbase-sdk-python-1.2/).
+现在你已经可以从任何一个[Couchbase Client SDKs](http://docs.couchbase.com/couchbase-sdk-python-1.2/)客户端来进行连接了。
 
-You should run the SDK on the host and point it to `http://localhost:8091/pools`
+你需要在主机上运行SDK，并将其指向`http://localhost:8091/pools`
 
-## Single host, multiple containers
+## 单主机，多容器
 
 	┌──────────────────────────────────────────────────────────┐
 	│                     Host OS (Linux)                      │
@@ -155,14 +155,11 @@ You should run the SDK on the host and point it to `http://localhost:8091/pools`
 	│  └───────────────┘ └───────────────┘  └───────────────┘  │
 	└──────────────────────────────────────────────────────────┘
 
--	Useful for testing out a multi-node cluster on your local workstation.
--	Not recommended for production use. (The norm for a production cluster is that each node runs on dedicated hardware.)
--	Allows you to experiment with cluster rebalancing and failover.
--	The networking is effectively the same as described the Software-Defined Network section: each container is given an internal IP address by Docker, and each of these IPs is visible to all other containers running on the same host
--	Internal IPs should be used in the Admin Console when adding new nodes to the cluster
--	For external access to the admin console, you should expose port 8091 of exactly one of the containers when you start it.
-
-You can choose to mount `/opt/couchbase/var` from the host, however you *must give each container a separate host directory*.
+-	非常适用于测试多主机节点集群上的情况。
+-	不建议在生产环境下使用。
+-	让你可以进行集群负载均衡方面的实验。
+-	每个容器都会被Docker分配各自的IP地址，这些IP地址对于同一主机上的所有容器都是可见的。
+-	你可以在管理员面板中使用内网IP向集群内添加新的主机。
 
 ```console
 $ docker run -d -v ~/couchbase/node1:/opt/couchbase/var couchbase
@@ -170,31 +167,31 @@ $ docker run -d -v ~/couchbase/node2:/opt/couchbase/var couchbase
 $ docker run -d -v ~/couchbase/node3:/opt/couchbase/var -p 8091:8091 couchbase
 ```
 
-**Setting up your Couchbase cluster**
+**设置你的Couchbase集群**
 
-1.	After running the last `docker run` command above, get the <container_id>. Lets call that `<node_3_container_id>`
+1.	当运行完上面的最后一个`docker run`命令后，我们得到了其容器ID，例如`<node_3_container_id>`
 
-2.	Get the ip address of the node 3 container by running `docker inspect --format '{{ .NetworkSettings.IPAddress }}' <node_3_container_id>`. Lets call that `<node_3_ip_addr>`.
+2.	我们可以通过命令`docker inspect --format '{{ .NetworkSettings.IPAddress }}' <node_3_container_id>`来得到其IP地址信息，让我们称其为 `<node_3_ip_addr>`。
 
-3.	From the host, connect to the Admin Console via http://localhost:8091 in your browser and click the "Setup" button.
+3.	在主机的浏览器中通过http://localhost:8091来访问管理员面板，并点击"Setup"按钮。
 
-4.	In the hostname field, enter `<node_3_ip_addr>`
+4.	在hostname项里，填入`<node_3_ip_addr>`
 
-5.	Accept all default values in the setup wizard. Choose a password that you will remember.
+5.	其他均采用默认设置，并为其设置密码。
 
-6.	Click the Server Nodes menu
+6.	点击Server Nodes菜单。
 
-7.	Choose the Add Servers button in the Admin Console
+7.	点击Add Servers按钮。
 
-8.	For the two remaining containers
+8.	对于其他两个容器
 
-	1.	Get the ip address of the container by running `docker inspect --format '{{ .NetworkSettings.IPAddress }}' <node_x_container_id>`. Lets call that `<node_x_ip_addr>`
+	1.	通过命令`docker inspect --format '{{ .NetworkSettings.IPAddress }}' <node_x_container_id>`来得到其IP地址，让我们称其为 `<node_x_ip_addr>`。
 
-	2.	In the Server IP Address field, use `<node_x_ip_addr>`
+	2.	在Server IP Address项里，填入`<node_x_ip_addr>`。
 
-	3.	In the password field, use the password created above.
+	3.	在密码项里，填写我们刚才创建的密码。
 
-## Multiple hosts, single container on each host
+## 多主机，单容器（对每一台主机而言）
 
 	┌───────────────────────┐  ┌───────────────────────┐  ┌───────────────────────┐
 	│   Host OS (Linux)     │  │   Host OS (Linux)     │  │   Host OS (Linux)     │
@@ -208,13 +205,13 @@ $ docker run -d -v ~/couchbase/node3:/opt/couchbase/var -p 8091:8091 couchbase
 	│  └─────────────────┘  │  │  └─────────────────┘  │  │  └─────────────────┘  │
 	└───────────────────────┘  └───────────────────────┘  └───────────────────────┘
 
-This is a typical Couchbase Server cluster, where each node runs on a dedicated host, presumably in the same datacenter with high speed network links between them. We assume that the datacenter LAN configuration allows each host in the cluster to see each other host via known IPs.
+这是一个典型的Couchbase Server集群，每个节点都运行在各自独立的主机上，各自之间通过高速的网络连接进行通信。
 
-Currently, the only supported approach for Couchbase Server on this deployment architecture is to use the `--net=host` flag.
+当前为了使用这一Couchbase Server架构的唯一方法是使用`--net=host`选项。
 
-Using the `--net=host` flag will have the following effects:
+使用`--net=host` 选项会带来如下效果:
 
--	The container will use the host's own networking stack, and bind directly to ports on the host.
+-	容器会使用主机自己的网络栈。
 -	Removes networking complications with Couchbase Server being behind a NAT.
 -	From a networking perspective, it is effectively the same as running Couchbase Server directly on the host.
 -	There is no need to use `-p` to "expose" any ports. Each container will use the IP address(es) of its host.
