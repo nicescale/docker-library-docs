@@ -1,75 +1,75 @@
-# Supported tags and respective `Dockerfile` links
+# 支持的tag标签，以及相关`Dockerfile`链接
 
 -	[`latest`, `0.52`, `0.52.2` (*Dockerfile*)](https://github.com/crate/docker-crate/blob/d8ef1163d5937083a6cb8831732822d0f5d3cb84/Dockerfile)
 -	[`0.51`, `0.51.7` (*Dockerfile*)](https://github.com/crate/docker-crate/blob/5d66f67b05395e9b7b4f55c2b3d682d43c7f59d9/Dockerfile)
 
-For more information about this image and its history, please see [the relevant manifest file (`library/crate`)](https://github.com/docker-library/official-images/blob/master/library/crate). This image is updated via pull requests to [the `docker-library/official-images` GitHub repo](https://github.com/docker-library/official-images).
+关于本镜像的更详细信息，请访问：[the relevant manifest file (`library/crate`)](https://github.com/docker-library/official-images/blob/master/library/crate)。本镜像的更新依赖：[the `docker-library/official-images` GitHub repo](https://github.com/docker-library/official-images)。
 
-For detailed information about the virtual/transfer sizes and individual layers of each of the above supported tags, please see [the `crate/tag-details.md` file](https://github.com/docker-library/docs/blob/master/crate/tag-details.md) in [the `docker-library/docs` GitHub repo](https://github.com/docker-library/docs).
+F关于镜像每个layer以及上述每个tag的详细信息，请查看位于[the `docker-library/docs` GitHub repo](https://github.com/docker-library/docs)下的 [the `crate/tag-details.md` file](https://github.com/docker-library/docs/blob/master/crate/tag-details.md)。
 
-# What is Crate?
+# Crate是什么？
 
-Crate allows to query and compute data with SQL in real time by providing a distributed aggregation engine, native search and super simple scalability. It offers auto-sharding and replication, super-fast multi index queries, distributed aggregations and sort, superfast full-text search, and super simple cluster management.
+Crate提供了一个分布式聚合引擎，让你可以通过SQL来完成数据的查询与计算。它提供了高速的多索引查询、分布式的聚合与排序、高速的全文检索、非常简洁的集群管理功能。
 
 [Crate](https://crate.io/)
 
 ![logo](https://raw.githubusercontent.com/docker-library/docs/master/crate/logo.png)
 
-## How to use this image
+## 如何使用本镜像
 
 ```console
 $ docker run -d -p 4200:4200 -p 4300:4300 crate:latest
 ```
 
-### Attach persistent data directory
+### 对接已经存在的文件目录
 
 ```console
 $ docker run -d -p 4200:4200 -p 4300:4300 -v <data-dir>:/data crate
 ```
 
-### Use custom Crate configuration
+### 自定义Crate配置
 
 ```console
 $ docker run -d -p 4200:4200 -p 4300:4300 crate -Des.config=/path/to/crate.yml
 ```
 
-Any configuration settings may be specified upon startup using the `-D` option prefix. For example, configuring the cluster name by using system properties will work this way:
+任何选项都具有`-D`前缀，例如设置集群名称：
 
 ```console
 $ docker run -d -p 4200:4200 -p 4300:4300 crate crate -Des.cluster.name=cluster
 ```
 
-For further configuration options please refer to the [Configuration](https://crate.io/docs/stable/configuration.html) section of the online documentation.
+更多配置相关信息请参考[Configuration](https://crate.io/docs/stable/configuration.html)。
 
-### Environment
+### 环境
 
-To set environment variables for Crate Data you need to use the `--env` option when starting the docker image.
+如果希望为Crate设置环境变量，你需要使用在运行容器时使用`--env`选项。
 
-For example, setting the heap size:
+例如:
 
 ```console
 $ docker run -d -p 4200:4200 -p 4300:4300 --env CRATE_HEAP_SIZE=32g crate
 ```
 
-## Multicast
+## 多播
 
-Crate uses multicast for node discovery by default. However, Docker does only support multicast on the same host. This means that nodes that are started on the same host will discover each other automatically, but nodes that are started on different hosts need unicast enabled.
+Crate默认使用多播机制来进行节点发现，不过Docker只支持在同一台主机上的多播机制。这意味着同一台主机上的节点可以自动地相互发现、识别，而对不同主机上的节点则需要使用单播。
 
-You can enable unicast in your custom `crate.yml`. See also: [Crate Multi Node Setup](https://crate.io/docs/en/latest/best_practice/multi_node_setup.html).
+你可以在自己的`crate.yml`允许使用单播，更多信息可以参考：[Crate Multi Node Setup](https://crate.io/docs/en/latest/best_practice/multi_node_setup.html)。
 
-Due to its architecture, Crate publishes the host it runs on for discovery within the cluster. Since the address of the host inside the docker container differs from the actual host the docker image is running on, you need to tell Crate to publish the address of the docker host for discovery.
+Crate会在其主机所在的集群内进行节点发现，然而容器内的主机地址和实际的主机地址可能并不相同，你可以向Crate指明所需的主机地址信息：
 
 ```console
 $ docker run -d -p 4200:4200 -p 4300:4300 crate crate -Des.network.publish_host=host1.example.com:
 ```
 
-If you change the transport port from the default `4300` to something else, you also need to pass the publish port to Crate.
+如果你希望使用自定义端口来取代默认的`4300`，那么需要告知Crate该端口信息：
 
 ```console
 $ docker run -d -p 4200:4200 -p 4321:4300 crate crate -Des.transport.publish_port=4321
 ```
 
-### Example Usage in a Multinode Setup
+### 多节点安装的一个示例：
 
 ```console
 $ HOSTS='crate1.example.com:4300,crate2.example.com:4300,crate3.example.com:4300'
@@ -90,32 +90,32 @@ $ docker run -d \
 		  -Des.discovery.zen.minimum_master_nodes=2
 ```
 
-# License
+# 证书信息
 
-View [license information](https://github.com/crate/crate/blob/master/LICENSE.txt) for the software contained in this image.
+关于本镜像包含的软件证书信息，可以查看：[license information](https://github.com/crate/crate/blob/master/LICENSE.txt)。
 
-# Supported Docker versions
+# 支持的Docker版本
 
-This image is officially supported on Docker version 1.9.1.
+支持的Docker版本
 
-Support for older versions (down to 1.6) is provided on a best-effort basis.
+而对于较老版本（低于1.6）则只能尽量做到对基本功能的支持。
 
-Please see [the Docker installation documentation](https://docs.docker.com/installation/) for details on how to upgrade your Docker daemon.
+关于如何升级Docker版本，请查看：[the Docker installation documentation](https://docs.docker.com/installation/)。
 
-# User Feedback
+# 用户反馈
 
-## Documentation
+## 文档
 
-Documentation for this image is stored in the [`crate/` directory](https://github.com/docker-library/docs/tree/master/crate) of the [`docker-library/docs` GitHub repo](https://github.com/docker-library/docs). Be sure to familiarize yourself with the [repository's `REAMDE.md` file](https://github.com/docker-library/docs/blob/master/README.md) before attempting a pull request.
+本镜像的文档位于[`docker-library/docs` GitHub repo](https://github.com/docker-library/docs)下的[`crate/` directory](https://github.com/docker-library/docs/tree/master/crate)目录中。在提交新的pull request之前，请确保已经熟悉于[repository's `REAMDE.md` file](https://github.com/docker-library/docs/blob/master/README.md)。
 
-## Issues
+## 问题
 
-If you have any problems with or questions about this image, please contact us through a [GitHub issue](https://github.com/crate/docker-crate/issues).
+如果你有关于本镜像的任何问题，请通过[GitHub issue](https://github.com/crate/docker-crate/issues)来提交。
 
-If you have any questions or suggestions we would be very happy to help you. So, feel free to join our [Gitter Channel](https://gitter.im/crate/crate).
+如果你有任何问题或建议，也欢迎直接加入我们的讨论频道：[Gitter Channel](https://gitter.im/crate/crate)。
 
-For further information and official contact please visit [https://crate.io](https://crate.io).
+关于更多信息或官方联系方式请参考：[https://crate.io](https://crate.io)。
 
-## Contributing
+## 提供帮助
 
-You are very welcome to contribute features or fixes! Before we can accept any pull requests to Crate Data we need you to agree to our [CLA](https://crate.io/community/contribute/). For further information please refer to [CONTRIBUTING.rst](https://github.com/crate/crate/blob/master/CONTRIBUTING.rst).
+我们欢迎任何形式的帮助和建议，在提交具体pull request之前，我们希望你已经阅读过[CLA](https://crate.io/community/contribute/)，更多信息请参考 [CONTRIBUTING.rst](https://github.com/crate/crate/blob/master/CONTRIBUTING.rst)。
