@@ -1,4 +1,4 @@
-# Supported tags and respective `Dockerfile` links
+# 支持的tag标签，以及相关`Dockerfile`链接
 
 -	[`8.2`, `8`, `jessie`, `latest` (*jessie/Dockerfile*)](https://github.com/tianon/docker-brew-debian/blob/d8d023e100f72982b31a8c932570080c3101b7e7/jessie/Dockerfile)
 -	[`jessie-backports` (*jessie/backports/Dockerfile*)](https://github.com/tianon/docker-brew-debian/blob/d8d023e100f72982b31a8c932570080c3101b7e7/jessie/backports/Dockerfile)
@@ -16,28 +16,28 @@
 -	[`rc-buggy` (*debian/rc-buggy/Dockerfile*)](https://github.com/tianon/dockerfiles/blob/22a998f815d55217afa0075411b810b8889ceac1/debian/rc-buggy/Dockerfile)
 -	[`experimental` (*debian/experimental/Dockerfile*)](https://github.com/tianon/dockerfiles/blob/22a998f815d55217afa0075411b810b8889ceac1/debian/experimental/Dockerfile)
 
-For more information about this image and its history, please see [the relevant manifest file (`library/debian`)](https://github.com/docker-library/official-images/blob/master/library/debian). This image is updated via pull requests to [the `docker-library/official-images` GitHub repo](https://github.com/docker-library/official-images).
+关于本镜像的更详细信息，请访问：[the relevant manifest file (`library/debian`)](https://github.com/docker-library/official-images/blob/master/library/debian)。本镜像的更新依赖：[the `docker-library/official-images` GitHub repo](https://github.com/docker-library/official-images)。
 
-For detailed information about the virtual/transfer sizes and individual layers of each of the above supported tags, please see [the `debian/tag-details.md` file](https://github.com/docker-library/docs/blob/master/debian/tag-details.md) in [the `docker-library/docs` GitHub repo](https://github.com/docker-library/docs).
+关于镜像每个layer以及上述每个tag的详细信息，请查看位于[the `docker-library/docs` GitHub repo](https://github.com/docker-library/docs)下的[the `debian/tag-details.md` file](https://github.com/docker-library/docs/blob/master/debian/tag-details.md)。
 
-# What is Debian?
+# Debian是什么?
 
-Debian is an operating system which is composed primarily of free and open-source software, most of which is under the GNU General Public License, and developed by a group of individuals known as the Debian project. Debian is one of the most popular Linux distributions for personal computers and network servers, and has been used as a base for several other Linux distributions.
+Debian是由免费及开源软件组成的操作系统，主要基于GNU General Public License协议，Debian项目是一个独立的、分散的组织，由3000人志愿者组成。Debian是使用最为广泛的Linux发行版之一，被应用于个人计算机和网络服务器，并且被用于其他一些Linux发行版的基础。
 
 > [wikipedia.org/wiki/Debian](https://en.wikipedia.org/wiki/Debian)
 
 ![logo](https://raw.githubusercontent.com/docker-library/docs/master/debian/logo.png)
 
-# About this image
+# 关于本镜像
 
-The `debian:latest` tag will always point the latest stable release (which is, at the time of this writing, `debian:jessie`). Stable releases are also tagged with their version (ie, `debian:8` is an alias for `debian:jessie`, `debian:7` is an alias for `debian:wheezy`, etc).
+`debian:latest`tag标签永远指向最新的稳定版本（例如在本文档写作时，指向的是`debian:jessie`），其他稳定版本也都被标注了各自的tag标签（例如，`debian:8`等同于`debian:jessie`，`debian:7`等同于`debian:wheezy`等等）。
 
-The rolling tags (`debian:stable`, `debian:testing`, etc) use the rolling suite names in their `/etc/apt/sources.list` file (ie, `deb
-http://httpredir.debian.org/debian testing main`).
+滚动标签（包括`debian:stable`、`debian:testing`等等）使用定义在`/etc/apt/sources.list`文件中的名称（例如, `deb
+http://httpredir.debian.org/debian testing main`）。
 
 ## `/etc/apt/sources.list`
 
-The mirror of choice for these images is [httpredir.debian.org](http://httpredir.debian.org) so that it's as close to optimal as possible, regardless of location or connection.
+有关在不同版本镜像间的选择，可以参考文档：[httpredir.debian.org](http://httpredir.debian.org)。
 
 ```console
 $ docker run debian:jessie cat /etc/apt/sources.list
@@ -46,28 +46,28 @@ deb http://httpredir.debian.org/debian jessie-updates main
 deb http://security.debian.org jessie/updates main
 ```
 
-# Supported Docker versions
+# 支持的Docker版本
 
-This image is officially supported on Docker version 1.9.1.
+本镜像官方提供了对于Docker1.9.1的支持。
 
-Support for older versions (down to 1.6) is provided on a best-effort basis.
+而对于较老版本（低于1.6）则只能尽量做到对基本功能的支持。
 
-Please see [the Docker installation documentation](https://docs.docker.com/installation/) for details on how to upgrade your Docker daemon.
+关于如何升级Docker版本，请查看：[the Docker installation documentation](https://docs.docker.com/installation/)。
 
-# User Feedback
+# 用户反馈
 
-## Documentation
+## 文档
 
-Documentation for this image is stored in the [`debian/` directory](https://github.com/docker-library/docs/tree/master/debian) of the [`docker-library/docs` GitHub repo](https://github.com/docker-library/docs). Be sure to familiarize yourself with the [repository's `README.md` file](https://github.com/docker-library/docs/blob/master/README.md) before attempting a pull request.
+本镜像的文档位于[`docker-library/docs` GitHub repo](https://github.com/docker-library/docs)下的[`debian/` directory](https://github.com/docker-library/docs/tree/master/debian)目录中。在提交新的pull request之前，请确保已经熟悉于[repository's `README.md` file](https://github.com/docker-library/docs/blob/master/README.md)。
 
-## Issues
+## 问题
 
-If you have any problems with or questions about this image, please contact us through a [GitHub issue](https://github.com/tianon/docker-brew-debian/issues).
+如果你有关于本镜像的任何问题，请通过[GitHub issue](https://github.com/tianon/docker-brew-debian/issues)来提交。
 
-You can also reach many of the official image maintainers via the `#docker-library` IRC channel on [Freenode](https://freenode.net).
+你也可以从[Freenode](https://freenode.net)的`#docker-library`聊天频道中，获得来自本镜像维护者的直接帮助。
 
-## Contributing
+## 提供帮助
 
-You are invited to contribute new features, fixes, or updates, large or small; we are always thrilled to receive pull requests, and do our best to process them as fast as we can.
+我们欢迎任何包括新功能、Bug修复在内的pull request提交，并且会尽快作出回复。
 
-Before you start to code, we recommend discussing your plans through a [GitHub issue](https://github.com/tianon/docker-brew-debian/issues), especially for more ambitious contributions. This gives other contributors a chance to point you in the right direction, give you feedback on your design, and help you find out if someone else is working on the same thing.
+在动手编码之前，我们建议首先在[GitHub issue](https://github.com/tianon/docker-brew-debian/issues)提出你的设想，这让其他开发者有机会为你提供一些指导性的建议，并且对设计提出反馈，同时还可以让你知道是否已经有人在着手开发该功能了。
