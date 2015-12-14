@@ -217,18 +217,18 @@ $ docker run -d -v ~/couchbase/node3:/opt/couchbase/var -p 8091:8091 couchbase
 -	There is no need to use `-p` to "expose" any ports. Each container will use the IP address(es) of its host.
 -	Increased efficiency, as there will be no Docker-imposed networking overhead.
 
-Start a container on *each host* via:
+通过命令来在*每台主机*启动各自的容器:
 
 ```console
 $ docker run -d -v ~/couchbase:/opt/couchbase/var --net=host couchbase
 ```
 
-To configure Couchbase Server:
+配置Couchbase Server:
 
--	Access the Couchbase Server Admin Console via port 8091 on any of the hosts.
--	Follow the same steps from the *Multiple containers on single host* section, however use the use the host IP address itself rather than using `docker inspect` to discover the IP address.
+-	登录Couchbase Server管理员面板（通过8091端口）。
+-	按照*多容器，单主机*的步骤，不过直接使用主机的IP地址而不是通过`docker inspect`。
 
-## Multiple hosts, multiple containers per host
+## 多主机，多容器（对每一台主机而言）
 
 	┌─────────────────────────────────────────┐  ┌─────────────────────────────────────────┐
 	│            Host OS (Linux)              │  │            Host OS (Linux)              │
@@ -242,48 +242,48 @@ To configure Couchbase Server:
 	│ └─────────────────┘ └─────────────────┘ │  │ └─────────────────┘ └─────────────────┘ │
 	└─────────────────────────────────────────┘  └─────────────────────────────────────────┘
 
--	Difficult to achieve with plain vanilla Docker, as there is no native way to allow each container unrestricted access to the internal IPs of containers running on other hosts.
--	There are software networking layers such as [Flannel](https://github.com/coreos/flannel) and [Weave](https://github.com/weaveworks/weave), but it is beyond the scope of this README to cover how those might be configured.
--	This is not a particularly useful deployment scenario for either testing or production use; you are better off checking out the various [cloud hosting scenarios](https://github.com/couchbase/docker/wiki#container-specific-cloud-hosting-platforms) available.
+-	对位于不同主机上容器间相互的IP访问，Docker并没有提供原生的支持。
+-	尽管存在一些软件层网络解决方案例如[Flannel](https://github.com/coreos/flannel)和[Weave](https://github.com/weaveworks/weave)，但这超出了本文档所涵盖的范围。
+-	这并不是一个常见的测试或发布情景，所以也许你应该考虑更适当的解决方案（[cloud hosting scenarios](https://github.com/couchbase/docker/wiki#container-specific-cloud-hosting-platforms)）。
 
-## Cloud environments
+## 云环境
 
-Although it is beyond the scope of this README, there is a [github wiki](https://github.com/couchbase/docker/wiki#container-specific-cloud-hosting-platforms) that contains guidance and instructions on how to run Couchbase Server Docker containers in various cloud environments.
+尽管超出了本文档的涵盖范围，但你可以从[github wiki](https://github.com/couchbase/docker/wiki#container-specific-cloud-hosting-platforms) 获得如何在云环境上运行Couchbase Server容器的相关指导。
 
-# License
+# 证书信息
 
-Couchbase Server comes in two editions:
+Couchbase Server包含两个版本：
 
--	[Community Edition](http://www.couchbase.com/community) -- free for unrestricted use.
+-	[社区版（Community Edition）](http://www.couchbase.com/community) -- 可以免费获取。
 
--	[Enterprise Edition](http://www.couchbase.com/agreement/subscription) -- free for development, paid subscription required for production deployment.
+-	[企业版（Enterprise Edition）](http://www.couchbase.com/agreement/subscription) -- 对于商业产品发布需要额外的花费。
 
-By default, the `latest` Docker tag points to the latest Enterprise Edition, as does the `enterprise` Docker tag. If you want the Community Edition instead, you should add the `community` tag, which will point to the latest available Community Edition.
+默认情况下`latest`tag标签指向最新的企业版版本，或者你也可以直接指明使用`enterprise` tag。如果你希望使用社区版，那么请指明`community` tag，这将指向最新的社区版版本：
 
 	Docker run couchbase:community
 
-# Supported Docker versions
+# 支持的Docker版本
 
-This image is officially supported on Docker version 1.9.1.
+本镜像官方提供了对于Docker1.9.1的支持。
 
-Support for older versions (down to 1.6) is provided on a best-effort basis.
+而对于较老版本（低于1.6）则只能尽量做到对基本功能的支持。
 
-Please see [the Docker installation documentation](https://docs.docker.com/installation/) for details on how to upgrade your Docker daemon.
+关于如何升级Docker版本，请查看：[the Docker installation documentation](https://docs.docker.com/installation/)。
 
-# User Feedback
+# 用户反馈
 
-## Documentation
+## 文档
 
-Documentation for this image is stored in the [`couchbase/` directory](https://github.com/docker-library/docs/tree/master/couchbase) of the [`docker-library/docs` GitHub repo](https://github.com/docker-library/docs). Be sure to familiarize yourself with the [repository's `README.md` file](https://github.com/docker-library/docs/blob/master/README.md) before attempting a pull request.
+本镜像的文档位于[`docker-library/docs` GitHub repo](https://github.com/docker-library/docs)下的[`couchbase/` directory](https://github.com/docker-library/docs/tree/master/couchbase)目录中。在提交新的pull request之前，请确保已经熟悉于 [repository's `README.md` file](https://github.com/docker-library/docs/blob/master/README.md)。
 
-## Issues
+## 问题
 
-If you have any problems with or questions about this image, please contact us through a [GitHub issue](https://github.com/docker-library/couchbase/issues).
+如果你有关于本镜像的任何问题，请通过[GitHub issue](https://github.com/docker-library/couchbase/issues).
 
-You can also reach many of the official image maintainers via the `#docker-library` IRC channel on [Freenode](https://freenode.net).
+你也可以从[Freenode](https://freenode.net)的`#docker-library`聊天频道中，获得来自本镜像维护者的直接帮助。
 
-## Contributing
+## 提供帮助
 
-You are invited to contribute new features, fixes, or updates, large or small; we are always thrilled to receive pull requests, and do our best to process them as fast as we can.
+我们欢迎任何包括新功能、Bug修复在内的pull request提交，并且会尽快作出回复。
 
-Before you start to code, we recommend discussing your plans through a [GitHub issue](https://github.com/docker-library/couchbase/issues), especially for more ambitious contributions. This gives other contributors a chance to point you in the right direction, give you feedback on your design, and help you find out if someone else is working on the same thing.
+在动手编码之前，我们建议首先在[GitHub issue](https://github.com/docker-library/couchbase/issues)提出你的设想，这让其他开发者有机会为你提供一些指导性的建议，并且对设计提出反馈，同时还可以让你知道是否已经有人在着手开发该功能了。
