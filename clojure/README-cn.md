@@ -98,7 +98,7 @@ $ docker run -it --rm -v "$PWD":/usr/src/app -w /usr/src/app clojure lein uberja
 
 ## 问题
 
-如果你有关于本镜像的任何问题，请通过[GitHub issue](https://github.com/Quantisan/docker-clojure/issues)。
+如果你有关于本镜像的任何问题，请通过[GitHub issue](https://github.com/Quantisan/docker-clojure/issues)来提交。
 
 你也可以从[Freenode](https://freenode.net)的`#docker-library`聊天频道中，获得来自本镜像维护者的直接帮助。
 
